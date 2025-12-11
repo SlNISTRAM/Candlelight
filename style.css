@@ -607,3 +607,107 @@ h2 {
     padding: 12px 25px;
   }
 }
+
+/* Floating Hearts Animation */
+.floating-hearts {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.heart {
+  position: absolute;
+  bottom: -20px;
+  width: 20px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg);
+  animation: floatUp 4s linear infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.heart::before {
+  top: -50%;
+  left: 0;
+}
+
+.heart::after {
+  top: 0;
+  left: -50%;
+}
+
+@keyframes floatUp {
+  0% {
+    bottom: -20px;
+    opacity: 0;
+    transform: translateX(0) rotate(45deg) scale(0.5);
+  }
+  10% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    bottom: 110%;
+    opacity: 0;
+    transform: translateX(var(--tx)) rotate(45deg) scale(1.2);
+  }
+}
+
+/* Magic Sparkle Cursor */
+.sparkle {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  animation: sparkle-anim 0.8s linear forwards;
+  box-shadow: 0 0 5px var(--gold);
+}
+
+@keyframes sparkle-anim {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* Button Synergy - Attention Pulse */
+.btn-primary.attention {
+  animation: attention-pulse 0.8s infinite;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4);
+}
+
+@keyframes attention-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* Reduced from 1.1 */
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.4); /* Softer shadow */
+  }
+  100% {
+    transform: scale(1);
+  }
+}

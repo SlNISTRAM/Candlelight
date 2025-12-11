@@ -68,32 +68,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Branding Overlay Control
             const brandingOverlay = document.getElementById('branding-overlay');
+            const brandingContent = `
+                <div class="branding-before">fever presents</div>
+                <div class="branding-after">Candlelight</div>
+            `;
             
             if (brandingOverlay) {
                 if (current === 'intro') {
-                    // Moving to reveal: Fade out branding
+                    // Moving to reveal: Fade out AND clear content to ensure reset
                     brandingOverlay.classList.add('fade-out');
-                } else if (next === 'proposal') {
-                    // Entering proposal: Fade in branding
-                    brandingOverlay.classList.remove('fade-out');
+                    setTimeout(() => {
+                        if (brandingOverlay.classList.contains('fade-out')) {
+                             brandingOverlay.innerHTML = ''; 
+                        }
+                    }, 900); // Wait for transition
                 } else if (next === 'success') {
-                     // Success: Fade out logic if needed, or keep it. 
-                     // Usually detailed proposal keeps it or removes it?
-                     // Let's assume keep it visible or fade out?
-                     // The original code didn't explicitly hide it on success, 
-                     // but `overlay-proposal` would stay visible unless hidden.
-                     // The requirement is "reappear like it does". 
-                     // So on proposal it appears.
+                     createFloatingHearts();
+                } else if (next === 'proposal') {
+                    // Entering proposal: Restore content and Fade in
+                    brandingOverlay.innerHTML = brandingContent;
+                    // Force reflow
+                    void brandingOverlay.offsetWidth;
+                    brandingOverlay.classList.remove('fade-out');
                 }
             }
         }, 800);
     };
 
-    // 1. Intro Click
+    // Floating Hearts Logic
+    const createFloatingHearts = () => {
+        const container = document.querySelector('.floating-hearts');
+        if (!container) return;
+
+        const createHeart = () => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            
+            // Random properties
+            const left = Math.random() * 100;
+            const size = Math.random() * 15 + 10;
+            const duration = Math.random() * 3 + 3;
+            const delay = Math.random() * 2;
+            const tx = (Math.random() - 0.5) * 100; // Translate X movement
+
+            heart.style.left = `${left}%`;
+            heart.style.width = `${size}px`;
+            heart.style.height = `${size}px`;
+            heart.style.animationDuration = `${duration}s`;
+            heart.style.animationDelay = `${delay}s`;
+            heart.style.setProperty('--tx', `${tx}px`);
+            
+            // Random color tint (gold/white/red)
+            const colors = ['rgba(212, 175, 55, 0.6)', 'rgba(255, 255, 255, 0.6)', 'rgba(138, 3, 3, 0.4)'];
+            heart.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            container.appendChild(heart);
+
+            // Cleanup
+            setTimeout(() => {
+                heart.remove();
+            }, (duration + delay) * 1000);
+        };
+
+        // Create hearts periodically
+        const interval = setInterval(createHeart, 300);
+        
+        // Stop after 10 seconds to save performance
+        setTimeout(() => clearInterval(interval), 10000);
+    };
+
+    // 1. Intro Click (Blow out candle logic)
     screens.intro.addEventListener('click', () => {
-        playAudio(); // Try to play audio on first interaction
-        switchScreen('intro', 'reveal');
+        // Find the flame
+        const flame = document.querySelector('.flame');
+        if (flame) {
+            flame.classList.add('extinguish');
+        }
+        
+        playAudio(); // Try to play audio on first interaction (if not muted)
+        
+        // Wait for extinguish animation (500ms) before switching
+        setTimeout(() => {
+            switchScreen('intro', 'reveal');
+        }, 600);
     });
+
+
 
     // 2. Reveal Section - Card Click
     const cardReveal = document.getElementById('card-reveal');
@@ -106,8 +166,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Sparkle Cursor Logic
+    const createSparkle = (e) => {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        
+        // Handle both mouse and touch events
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        sparkle.style.left = `${x}px`;
+        sparkle.style.top = `${y}px`;
+        
+        document.body.appendChild(sparkle);
+        
+        setTimeout(() => sparkle.remove(), 800);
+    };
+
+    document.addEventListener('mousemove', createSparkle);
+    document.addEventListener('touchmove', createSparkle, { passive: true });
+
     // 3. "No" Button Interaction (Run away with smooth animation)
+    let noClickCount = 0;
+    const noTexts = [
+        "No", 
+        "¿Segura?", 
+        "¡No puedes!", 
+        "¡Sigo aquí!",
+        "¡Ándale!",
+        "Por favooor 🥺",
+        "No seas así 💔",
+        "Mira el otro botón 😉",
+        "¡Ya di que sí!",
+        "Solo un click...",
+        "¡No muerdo!",
+        "¿Y si lo hablamos?",
+        "Soy inevitable",
+        "Vamos...",
+        "¡Te estoy esperando!",
+        "¿Sigues intentando?",
+        "Mejor ríndete",
+        "¡El otro botón brilla más!",
+        "Acepta tu destino 💙",
+        "Ya casi...",
+        "¡No te canses!",
+        "¡Sigo siendo la mejor opción!"
+    ];
+
     const moveButton = () => {
+        // Trigger Attention on Yes Button
+        btnYes.classList.add('attention');
+        // Remove attention after a short while so it doesn't pulse forever if they stop
+        setTimeout(() => btnYes.classList.remove('attention'), 1500);
+
+        // Update Text (Cycle through options)
+        noClickCount++;
+        const textIndex = noClickCount % noTexts.length;
+        btnNo.textContent = noTexts[textIndex];
+
         // Get button dimensions
         const btnWidth = btnNo.offsetWidth;
         const btnHeight = btnNo.offsetHeight;
@@ -141,12 +257,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. "Yes" Button Click
     btnYes.addEventListener('click', () => {
-        // Trigger confetti
+        // Trigger confetti (Hearts)
         confetti({
             particleCount: 150,
             spread: 70,
             origin: { y: 0.6 },
-            colors: ['#d4af37', '#ffffff', '#8a0303']
+            colors: ['#d4af37', '#ffffff', '#8a0303'],
+            shapes: ['heart']
         });
 
         // Loop confetti a bit
@@ -157,14 +274,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#d4af37', '#ffffff']
+                colors: ['#d4af37', '#ffffff'],
+                shapes: ['heart']
             });
             confetti({
                 particleCount: 5,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#d4af37', '#ffffff']
+                colors: ['#d4af37', '#ffffff'],
+                shapes: ['heart']
             });
             if (Date.now() < end) {
                 requestAnimationFrame(frame);
