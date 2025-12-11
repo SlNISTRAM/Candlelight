@@ -1,0 +1,609 @@
+:root {
+  --gold: #d4af37;
+  --gold-light: #f3e5ab;
+  --dark: #050505;
+  --red: #8a0303;
+  --text: #ffffff;
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--dark);
+  color: var(--text);
+  font-family: var(--font-sans);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("assets/candlelight_background.png") no-repeat center center/cover;
+  opacity: 0.50;
+  z-index: -1;
+  pointer-events: none;
+  --hide-text: 1;
+}
+
+.overlay::before {
+  content: none;
+}
+
+.overlay::after {
+  content: none;
+}
+
+/* Unified Branding Overlay */
+.branding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.9s ease-out;
+}
+
+.branding-overlay.fade-out {
+  opacity: 0;
+}
+
+.branding-before {
+  position: absolute;
+  top: 12%;
+  left: 35%;
+  transform: translateX(-50%);
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+}
+
+.branding-after {
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Playfair Display', serif;
+  font-size: 8rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.05em;
+}
+
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  padding: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+/* Screens */
+.screen {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  display: none;
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  animation: fadeIn 1.5s ease-out;
+}
+
+.screen.hidden {
+  display: none;
+}
+
+/* Typography */
+h1 {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  color: var(--gold);
+  margin-top: 20px;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+
+h2 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--text);
+  margin-bottom: 30px;
+}
+
+/* Romantic typewriter text */
+#proposal-text {
+  font-family: 'Dancing Script', 'Brush Script MT', cursive;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 2.5rem;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: center;
+  margin-bottom: 25px;
+  white-space: nowrap;
+  min-height: 3.75rem;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: var(--gold-light);
+  margin-top: 10px;
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+/* Candle Animation */
+.candle-container {
+  width: 100px;
+  height: 150px;
+  position: relative;
+  margin-bottom: 2rem;
+  cursor: pointer;
+}
+
+.candle {
+  width: 30px;
+  height: 80px;
+  background: linear-gradient(#fff, #f0f0f0);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.flame {
+  width: 16px;
+  height: 30px;
+  background: radial-gradient(white, gold, orange, red);
+  border-radius: 50% 50% 20% 20%;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 30px gold;
+  animation: flicker 0.1s infinite alternate;
+}
+
+/* Event Card Reveal */
+.card-reveal {
+  perspective: 1500px;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.event-card {
+  width: 550px;
+  max-width: 90vw;
+  background: #000000;
+  border-radius: 12px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6),
+              0 15px 40px rgba(0, 0, 0, 0.4);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.event-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.7),
+              0 20px 50px rgba(212, 175, 55, 0.2);
+}
+
+.ticket-content {
+  padding: 40px;
+}
+
+.ticket-title {
+  font-family: var(--font-sans);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 40px 0;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.ticket-info {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.info-item {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.info-icon {
+  width: 48px;
+  height: 48px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #ffffff;
+}
+
+.info-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.info-text {
+  flex: 1;
+}
+
+.info-label {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: #999999;
+  margin: 0 0 8px 0;
+  font-weight: 400;
+}
+
+.info-value {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.card-reveal.clicked .event-card {
+  transform: scale(1.15);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8),
+              0 25px 60px rgba(212, 175, 55, 0.3),
+              0 0 40px rgba(212, 175, 55, 0.4);
+  transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 1s ease-out;
+  filter: brightness(1.05);
+}
+
+.card-reveal.clicked::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: -1;
+  animation: fadeInBlur 0.6s ease-out;
+}
+
+@keyframes fadeInBlur {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
+}
+
+.instruction {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-top: 25px;
+  font-style: italic;
+  letter-spacing: 0.6px;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: auto;
+}
+
+.btn {
+  padding: 16px 40px;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #000;
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5),
+              0 4px 10px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 35px rgba(212, 175, 55, 0.7),
+              0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+.btn-secondary {
+  background: rgba(138, 3, 3, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--red);
+  color: #ff6b6b;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 15px rgba(138, 3, 3, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(138, 3, 3, 0.3);
+  border-color: #ff6b6b;
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Animations Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flicker {
+  0% {
+    transform: translateX(-50%) skewX(2deg) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(-50%) skewX(-2deg) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateX(-50%) skewX(1deg) scale(0.95);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 600px) {
+    .envelope.open .card {
+        transform: translateY(-150px) scale(1.3);
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .candle-container {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 380px) {
+    .envelope {
+        width: 260px;
+        height: 170px;
+    }
+    
+    .card {
+        width: 240px;
+        height: 150px;
+    }
+    
+    .envelope .flap {
+        border-left-width: 130px;
+        border-right-width: 130px;
+    }
+    
+    .pocket {
+        border-left-width: 130px;
+        border-right-width: 130px;
+    }
+    
+    .envelope.open .card {
+        transform: translateY(-120px) scale(1.2);
+    }
+}
+
+/* Success Screen - Move content up */
+.success-content {
+  margin-top: -80px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Branding Text - smaller on mobile */
+  .branding-before {
+    font-size: 1.2rem;
+    top: 12% !important;
+    left: 35% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .branding-after {
+    font-size: 4rem;
+    top: 25% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  /* Typography adjustments */
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  #proposal-text {
+    font-size: 1.8rem;
+    white-space: normal;
+    min-height: auto;
+    line-height: 1.4;
+  }
+  
+  /* Event card - smaller on mobile */
+  .event-card {
+    width: 95vw;
+    max-width: 95vw;
+  }
+  
+  .ticket-content {
+    padding: 25px 20px;
+  }
+  
+  .ticket-title {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+  }
+  
+  .ticket-info {
+    gap: 20px;
+  }
+  
+  .info-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .info-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .info-label {
+    font-size: 0.75rem;
+  }
+  
+  .info-value {
+    font-size: 0.95rem;
+  }
+  
+  /* Card click effect - less scale on mobile */
+  .card-reveal.clicked .event-card {
+    transform: scale(1.05);
+  }
+  
+  /* Buttons - full width on mobile */
+  .btn {
+    width: 100%;
+    max-width: 280px;
+    font-size: 1rem;
+    padding: 14px 30px;
+  }
+  
+  .instruction {
+    font-size: 0.9rem;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small phones */
+  .branding-before {
+    font-size: 1rem;
+    top: 12% !important;
+    left: 35% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  .branding-after {
+    font-size: 3rem;
+    top: 25% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  #proposal-text {
+    font-size: 1.5rem;
+  }
+  
+  .ticket-title {
+    font-size: 1.3rem;
+  }
+  
+  .ticket-content {
+    padding: 20px 15px;
+  }
+  
+  .btn {
+    font-size: 0.95rem;
+    padding: 12px 25px;
+  }
+}

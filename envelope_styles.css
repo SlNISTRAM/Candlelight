@@ -1,0 +1,223 @@
+/* Envelope - Completely Redesigned */
+.envelope-wrapper {
+  perspective: 1500px;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+.envelope {
+  width: 380px;
+  height: 250px;
+  background: linear-gradient(145deg, #f8f6f0 0%, #ede8dc 100%);
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35),
+              0 10px 25px rgba(0, 0, 0, 0.2),
+              inset 0 2px 3px rgba(255, 255, 255, 0.7);
+  border: 2.5px solid #c5a059;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.envelope::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border: 1px solid rgba(197, 160, 89, 0.25);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.envelope:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45),
+              0 15px 35px rgba(197, 160, 89, 0.15);
+}
+
+.envelope .flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 190px solid transparent;
+  border-right: 190px solid transparent;
+  border-top: 150px solid #c5a059;
+  transform-origin: top;
+  transition: transform 1.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.25));
+}
+
+.envelope .flap::after {
+  content: '';
+  position: absolute;
+  top: -145px;
+  left: -185px;
+  width: 360px;
+  height: 140px;
+  background: linear-gradient(180deg, #d4af37 0%, #c5a059 100%);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  border-left: 2.5px solid rgba(255, 255, 255, 0.25);
+  border-right: 2.5px solid rgba(255, 255, 255, 0.25);
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.pocket {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 190px solid transparent;
+  border-right: 190px solid transparent;
+  border-bottom: 135px solid #ede8dc;
+  z-index: 4;
+}
+
+.card {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 340px;
+  height: 210px;
+  background: linear-gradient(135deg, #ffffff 0%, #fffefb 100%);
+  transition: transform 1.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 1.4s ease-out;
+  z-index: 2;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1.5px solid #c5a059;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12),
+              inset 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(197, 160, 89, 0.15);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.card-content {
+  padding: 28px 24px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-header {
+  text-align: center;
+}
+
+.card-header h3 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.card-subtitle {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #666;
+  margin: 0;
+  letter-spacing: 1.2px;
+}
+
+.card-divider {
+  width: 70px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #c5a059, transparent);
+  margin: 14px auto;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.detail-icon {
+  font-size: 1.5rem;
+  min-width: 35px;
+  opacity: 0.75;
+  line-height: 1;
+}
+
+.detail-text {
+  flex: 1;
+}
+
+.detail-label {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  color: #999;
+  margin: 0 0 4px 0;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+}
+
+.detail-value {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.detail-sub {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: #666;
+  margin: 2px 0 0 0;
+  font-style: italic;
+}
+
+.envelope.open .card {
+  transform: translateY(-320px) scale(2);
+  z-index: 10;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5),
+              0 25px 60px rgba(197, 160, 89, 0.2),
+              0 0 0 3px #c5a059,
+              inset 0 2px 5px rgba(255, 255, 255, 0.9);
+  transition-delay: 0.8s;
+  border: 2.5px solid #c5a059;
+}
+
+.instruction {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 20px;
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
